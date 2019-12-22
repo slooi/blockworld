@@ -58,7 +58,7 @@ gl.vertexAttribPointer(
 	2,
 	gl.FLOAT,
 	false,
-	2*Float32Array.BYTES_PER_ELEMENT,
+	5*Float32Array.BYTES_PER_ELEMENT,
 	0
 )
 gl.enableVertexAttribArray(attribLocations.a_VertexPositions)
@@ -67,7 +67,7 @@ gl.vertexAttribPointer(
 	3,
 	gl.FLOAT,
 	false,
-	3*Float32Array.BYTES_PER_ELEMENT,
+	5*Float32Array.BYTES_PER_ELEMENT,
 	2*Float32Array.BYTES_PER_ELEMENT
 )
 gl.enableVertexAttribArray(attribLocations.a_Color)
