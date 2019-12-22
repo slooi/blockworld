@@ -37,7 +37,7 @@ for(let i=0;i<gl.getProgramParameter(program,gl.ACTIVE_ATTRIBUTES);i++){
 }
 console.log('attribLocations',attribLocations)
 
-
+// VERTICES
 // Vertices
 const vertices = new Float32Array([
 //	X		Y			
@@ -70,6 +70,7 @@ const colors = new Float32Array([
 	0,1,0
 ])
 
+// COLOR
 // Color Buffer
 const colorBuffer = gl.createBuffer()
 gl.bindBuffer(gl.ARRAY_BUFFER,colorBuffer)
@@ -89,6 +90,18 @@ gl.enableVertexAttribArray(attribLocations.a_Color)
 gl.drawArrays(gl.POINTS,0,vertices.length/2)
 gl.drawArrays(gl.TRIANGLES,0,vertices.length/2)
 
+
+// textures
+
+// Uniform Locations
+let uniformLocations = []
+for(let i=0;i<gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);i++){
+	const uniformName = gl.getActiveUniform(program,i).name
+	console.log('asd',gl.getActiveUniform(program,i))
+	uniformLocations[uniformName] = gl.getUniformLocation(program,uniformName)
+}
+
+console.log('uniformLocations',uniformLocations)
 
 function buildShader(type,shaderSource){
 	const shader = gl.createShader(type)
