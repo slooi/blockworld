@@ -19,7 +19,7 @@ if(!gl){
 	alert('ERROR all versions of webgl are not supported on your browser, please use a browser which supports webgl')
 }
 
-// Viewport &
+// Viewport & clear
 gl.viewport(0,0,300,300	)
 gl.clearColor(0.4,0.6,0.8,1)
 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
@@ -35,9 +35,7 @@ for(let i=0;i<gl.getProgramParameter(program,gl.ACTIVE_ATTRIBUTES);i++){
 	const attribName = gl.getActiveAttrib(program,i).name
 	attribLocations[attribName] = gl.getAttribLocation(program,attribName)
 }
-console.log('attribLocations',attribLocations)
 
-// VERTICES
 // Vertices
 const vertices = new Float32Array([
 //	X		Y			
@@ -62,7 +60,6 @@ gl.vertexAttribPointer(
 )
 gl.enableVertexAttribArray(attribLocations.a_VertexPositions)
 
-// textures
 
 // Uniform Locations
 let uniformLocations = []
@@ -116,12 +113,11 @@ gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
 
 
-
 gl.drawArrays(gl.POINTS,0,vertices.length/2)
 // gl.drawArrays(gl.TRIANGLES,0,vertices.length/2)
 
 
-
+// FUNCTIONS
 
 function buildShader(type,shaderSource){
 	const shader = gl.createShader(type)
