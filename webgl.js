@@ -62,32 +62,6 @@ gl.vertexAttribPointer(
 )
 gl.enableVertexAttribArray(attribLocations.a_VertexPositions)
 
-// Colors
-const colors = new Float32Array([
-	//	R, G, B
-	0,0,0	,
-	1,0,0,
-	0,1,0
-])
-
-// COLOR
-// Color Buffer
-const colorBuffer = gl.createBuffer()
-gl.bindBuffer(gl.ARRAY_BUFFER,colorBuffer)
-gl.bufferData(gl.ARRAY_BUFFER,colors,gl.STATIC_DRAW)
-
-// Color Attribute Pointer
-gl.vertexAttribPointer(
-	attribLocations.a_Color,
-	3,
-	gl.FLOAT,
-	false,
-	3*Float32Array.BYTES_PER_ELEMENT,
-	0
-)
-gl.enableVertexAttribArray(attribLocations.a_Color)
-
-
 // textures
 
 // Uniform Locations
@@ -110,8 +84,7 @@ var pixel = new Uint8Array([
 	0,0,255,255, 
 	0,100,0,255
 ]);
-const diameter = 2
-gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,diameter,diameter,0,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
+gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,2,2,0,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST)	
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST)
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
@@ -122,7 +95,9 @@ gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
 const shadowTexture = gl.createTexture()
 gl.activeTexture(gl.TEXTURE1)
 gl.bindTexture(gl.TEXTURE_2D,shadowTexture)
-gl.uniform1i(uniformLocations.u_ShadowTiles,0)
+gl.uniform1i(uniformLocations.u_ShadowTiles,1)
+
+const diameter = 8
 var pixel = []
 for(let i=0;i<diameter;i++){
 	for(let j=0;j<diameter;j++){
@@ -135,8 +110,8 @@ for(let i=0;i<diameter;i++){
 }
 pixel = new Uint8Array(pixel)
 gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,diameter,diameter,0,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
-gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR)	
-gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR)
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST)	
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST)
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
 
