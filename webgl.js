@@ -1,5 +1,8 @@
 console.log('loaded webgl.js')
 
+function loadTextures(){
+	
+}
 // Shader Source
 const vsSource = document.getElementById('vsSource').textContent
 const fsSource = document.getElementById('fsSource').textContent
@@ -72,11 +75,6 @@ for(let i=0;i<gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);i++){
 
 // TEXTURES
 const imageTexture = new Image()
-imageTexture.onload = function(){
-	gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,imageTexture)
-
-	gl.drawArrays(gl.POINTS,0,vertices.length/2)
-}
 imageTexture.src = "tileSheet.png"
 
 
@@ -84,6 +82,7 @@ const texture = gl.createTexture()
 gl.activeTexture(gl.TEXTURE0)
 gl.bindTexture(gl.TEXTURE_2D,texture)
 gl.uniform1f(uniformLocations.u_TileSheet,0)
+gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,imageTexture)
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST)	
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST)
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
@@ -131,6 +130,7 @@ gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
 // gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
 
 
+gl.drawArrays(gl.POINTS,0,vertices.length/2)
 // gl.drawArrays(gl.TRIANGLES,0,vertices.length/2)
 
 
