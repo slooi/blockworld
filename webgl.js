@@ -71,49 +71,66 @@ for(let i=0;i<gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);i++){
 
 
 // TEXTURES
+const imageTexture = new Image()
+imageTexture.onload = function(){
+	gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,imageTexture)
+
+	gl.drawArrays(gl.POINTS,0,vertices.length/2)
+}
+imageTexture.src = "tileSheet.png"
+
+
 const texture = gl.createTexture()
 gl.activeTexture(gl.TEXTURE0)
 gl.bindTexture(gl.TEXTURE_2D,texture)
-gl.uniform1i(uniformLocations.u_TileSheet,0)
-var pixel = new Uint8Array([
-	255,0,0,255, 
-	0,255,0,255,
-	0,0,255,255, 
-	0,100,0,255
-]);
-gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,2,2,0,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
+gl.uniform1f(uniformLocations.u_TileSheet,0)
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST)	
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST)
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
 
+// const texture = gl.createTexture()
+// gl.activeTexture(gl.TEXTURE0)
+// gl.bindTexture(gl.TEXTURE_2D,texture)
+// gl.uniform1i(uniformLocations.u_TileSheet,0)
+// var pixel = new Uint8Array([
+// 	255,0,0,255, 
+// 	0,255,0,255,
+// 	0,0,255,255, 
+// 	0,100,0,255
+// ]);
+// gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,2,2,0,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
+// gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST)	
+// gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST)
+// gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
+// gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
 
 
-const shadowTexture = gl.createTexture()
-gl.activeTexture(gl.TEXTURE1)
-gl.bindTexture(gl.TEXTURE_2D,shadowTexture)
-gl.uniform1i(uniformLocations.u_ShadowTiles,1)
 
-const diameter = 8
-var pixel = []
-for(let i=0;i<diameter;i++){
-	for(let j=0;j<diameter;j++){
-		const val = (i*(14*16)/diameter) 
-		pixel.push(val)
-		pixel.push(val)
-		pixel.push(val)
-		pixel.push(255)
-	}
-}
-pixel = new Uint8Array(pixel)
-gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,diameter,diameter,0,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
-gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST)	
-gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST)
-gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
-gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
+// const shadowTexture = gl.createTexture()
+// gl.activeTexture(gl.TEXTURE1)
+// gl.bindTexture(gl.TEXTURE_2D,shadowTexture)
+// gl.uniform1i(uniformLocations.u_ShadowTiles,1)
+
+// const diameter = 8
+// var pixel = []
+// for(let i=0;i<diameter;i++){
+// 	for(let j=0;j<diameter;j++){
+// 		const val = (i*(14*16)/diameter) 
+// 		pixel.push(val)
+// 		pixel.push(val)
+// 		pixel.push(val)
+// 		pixel.push(255)
+// 	}
+// }
+// pixel = new Uint8Array(pixel)
+// gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,diameter,diameter,0,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
+// gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST)	
+// gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST)
+// gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
+// gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
 
 
-gl.drawArrays(gl.POINTS,0,vertices.length/2)
 // gl.drawArrays(gl.TRIANGLES,0,vertices.length/2)
 
 
