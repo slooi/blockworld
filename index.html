@@ -16,7 +16,12 @@
 		<!-- SHADERS -->
 		<script type="shader" id="vsSource">
 			attribute vec2 a_VertexPositions;
+			attribute float a_BlockIndex;
+
+			varying float v_BlockIndex;
 			void main(){
+				v_BlockIndex = a_BlockIndex;
+
 				gl_Position = vec4(a_VertexPositions,0.0,1.0);
 				gl_PointSize = 30.0;
 			}
@@ -25,15 +30,17 @@
 		<script type="shader" id="fsSource">
 			precision mediump float;
 
+			varying float v_BlockIndex;
+
 			uniform sampler2D u_TileSheet;
 			uniform sampler2D u_ShadowTiles;
-
+		
 			void main(){
 				vec4 shadowTile = texture2D(u_ShadowTiles,vec2(gl_PointCoord));
 		
 				
 
-				vec4 texture = texture2D(u_TileSheet, vec2(gl_PointCoord));
+				vec4 texture = texture2D(u_TileSheet, vec2(gl_PointCoord.x,(gl_PointCoord.y+2.0)/7.0));
 				gl_FragColor = shadowTile*texture;
 			}
 		</script>
