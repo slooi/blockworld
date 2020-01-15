@@ -33,15 +33,21 @@
 			varying float v_BlockIndex;
 
 			uniform sampler2D u_TileSheet;
-			uniform sampler2D u_ShadowTiles;
+			uniform sampler2D u_LightTileTL;
+			uniform sampler2D u_LightTileTR;
+			uniform sampler2D u_LightTileBL;
+			uniform sampler2D u_LightTileBR;
 		
 			void main(){
-				vec4 shadowTile = texture2D(u_ShadowTiles,vec2(gl_PointCoord));
+				vec4 shadowBase = texture2D(u_TileSheet, vec2(gl_PointCoord.x,(gl_PointCoord.y+0.0)/7.0));
+				vec4 lightTileTL = texture2D(u_LightTileTL,vec2(gl_PointCoord));				
+				vec4 lightTileTR = texture2D(u_LightTileTR,vec2(gl_PointCoord));
+				vec4 shadowMask = shadowBase + lightTileTL * 1.0 + lightTileTR * 1.0;
 		
 				
 
-				vec4 texture = texture2D(u_TileSheet, vec2(gl_PointCoord.x,(gl_PointCoord.y+2.0)/7.0));
-				gl_FragColor = shadowTile*texture;
+				vec4 texture = texture2D(u_TileSheet, vec2(gl_PointCoord.x,(gl_PointCoord.y+1.0)/7.0));
+				gl_FragColor = shadowMask*texture;
 			}
 		</script>
 

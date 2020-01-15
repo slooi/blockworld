@@ -87,6 +87,7 @@ function createWebglObj(imageTexture){
 
 
 	// TEXTURES
+	// Use image for texture
 	const texture = gl.createTexture()
 	gl.activeTexture(gl.TEXTURE0)
 	gl.bindTexture(gl.TEXTURE_2D,texture)
@@ -97,6 +98,7 @@ function createWebglObj(imageTexture){
 	gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
 	gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
 
+	// Create texture manually
 	// const texture = gl.createTexture()
 	// gl.activeTexture(gl.TEXTURE0)
 	// gl.bindTexture(gl.TEXTURE_2D,texture)
@@ -113,30 +115,7 @@ function createWebglObj(imageTexture){
 	// gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
 	// gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
 
-
-
-	const shadowTexture = gl.createTexture()
-	gl.activeTexture(gl.TEXTURE1)
-	gl.bindTexture(gl.TEXTURE_2D,shadowTexture)
-	gl.uniform1i(uniformLocations.u_ShadowTiles,1)
-
-	const diameter = 16
-	var pixel = []
-	for(let i=0;i<diameter;i++){
-		for(let j=0;j<diameter;j++){
-			const val = (i*(14*16)/diameter) 
-			pixel.push(val)
-			pixel.push(val)
-			pixel.push(val)
-			pixel.push(255)
-		}
-	}
-	pixel = new Uint8Array(pixel)
-	gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,diameter,diameter,0,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
-	gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST)	
-	gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST)
-	gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
-	gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
+	buildAllLightTextures()
 
 
 
@@ -144,6 +123,28 @@ function createWebglObj(imageTexture){
 	// gl.drawArrays(gl.TRIANGLES,0,vertices.length/2)
 
 	// FUNCTIONS
+
+	function buildAllLightTextures(){
+		const diameter = 4
+		const TLLight = generateTLLight(diameter)
+		buildLightTexture(TLLight,diameter,1,'u_LightTileTL')
+		console.log('TLLight',TLLight)
+		buildLightTexture(horizontalFlipArray(TLLight),diameter,2,'u_LightTileTR')
+	}
+
+	function buildLightTexture(lightTexture,diameter,textureNum,textureName){
+		const shadowTexture = gl.createTexture()
+		gl.activeTexture(gl.TEXTURE0+textureNum)
+		gl.bindTexture(gl.TEXTURE_2D,shadowTexture)
+		gl.uniform1i(uniformLocations[textureName],textureNum)
+	
+		const pixel = new Uint8Array(lightTexture)
+		gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,diameter,diameter,0,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
+		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR)	
+		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR)
+		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
+		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
+	}
 
 	function render(){
 		gl.drawArrays(gl.POINTS,0,vertices.length/2)
@@ -182,3 +183,36 @@ function createWebglObj(imageTexture){
 }
 
 
+function generateTLLight(diameter){
+	var pixel = []
+	for(let i=0;i<diameter;i++){
+		for(let j=0;j<diameter;j++){
+			const iVal = i>j ? i : j
+			const lightVal = 255 - iVal*255/(diameter-1)
+			pixel.push(lightVal)
+			pixel.push(lightVal)
+			pixel.push(lightVal)
+			pixel.push(255)
+		}
+	}
+	return pixel
+}
+
+// Input: array
+// Output: array
+function horizontalFlipArray(array){
+	const flippedArray = []
+	const numOfPixCols = (array.length/4) ** 0.5	//exclusive of RGBA
+	const numOfPixRows = numOfPixCols	//exclusive of RGBA
+	const numOfElementsPerRow = array.length/numOfPixRows
+	for(let i=0;i<numOfPixRows;i++){
+		for(let j=numOfPixCols-1;j>=0;j--){
+			const linearIndex = i * numOfElementsPerRow + j * 4 
+			for(let k=0;k<4;k++){
+				flippedArray.push(array[linearIndex+k])
+			}
+		}
+	}
+	console.log('horizontal flip: ',flippedArray)
+	return flippedArray
+}
