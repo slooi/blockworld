@@ -49,17 +49,17 @@ function createWebglObj(imageTexture){
 	console.log('attribLocations',attribLocations)
 
 	// Vertices
-	const vertices = new Float32Array([
+	var vertices = [
 	//	X		Y			
 			0, 0.0,
 			1, 0.0,	
 			0.0, 1
-	])
+	]
 
 	// Vertex Buffer
 	const vertexBuffer = gl.createBuffer()
 	gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer)
-	gl.bufferData(gl.ARRAY_BUFFER,vertices,gl.STATIC_DRAW)
+	gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.STATIC_DRAW)
 
 	// Vertex Attribute Pointer
 	gl.vertexAttribPointer(
@@ -73,19 +73,18 @@ function createWebglObj(imageTexture){
 	gl.enableVertexAttribArray(attribLocations.a_VertexPositions)
 
 
-
 	// lightDirection
-	const lightDirection = new Float32Array([
+	var lightDirections = [
 		//	TL TR BL BR
-				1,	1,	1,	1,
+				0,	1,	1,	1,
 				1,	1,	1,	1,
 				1,	1,	1,	1
-		])
+		]
 	
 	// Vertex Buffer
 	const lightDirectionBuffer = gl.createBuffer()
 	gl.bindBuffer(gl.ARRAY_BUFFER,lightDirectionBuffer)
-	gl.bufferData(gl.ARRAY_BUFFER,lightDirection,gl.STATIC_DRAW)
+	gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(lightDirections),gl.STATIC_DRAW)
 
 	// Vertex Attribute Pointer
 	gl.vertexAttribPointer(
@@ -97,12 +96,6 @@ function createWebglObj(imageTexture){
 		0
 	)
 	gl.enableVertexAttribArray(attribLocations.a_LightDirection)
-
-	// // Block Index
-	// const blockIndex = new Float32Array([
-	// //	
-	// ])
-
 
 	// Uniform Locations
 	let uniformLocations = []
@@ -178,10 +171,6 @@ function createWebglObj(imageTexture){
 		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
 	}
 
-	function render(){
-		gl.drawArrays(gl.POINTS,0,vertices.length/2)
-	}
-
 	function buildShader(type,shaderSource){
 		const shader = gl.createShader(type)
 		gl.shaderSource(shader,shaderSource)
@@ -211,8 +200,26 @@ function createWebglObj(imageTexture){
 		return program
 	}
 
+	// Exposed Functions
+
+	function setBlocks(newVertices,newLightDirections){
+		vertices = newVertices
+		lightDirections = newLightDirections
+
+
+		gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer)
+		gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.STATIC_DRAW)
+		gl.bindBuffer(gl.ARRAY_BUFFER,lightDirectionBuffer)
+		gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(lightDirections),gl.STATIC_DRAW)
+	}
+
+	function render(){
+		gl.drawArrays(gl.POINTS,0,vertices.length/2)
+	}
+
 	return {
-		render
+		render,
+		setBlocks: setBlocks
 	}
 }
 

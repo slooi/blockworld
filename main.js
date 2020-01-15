@@ -14,5 +14,13 @@ async function setup(){
 }
 
 function gameLoop(webglObj){
+
+	// webglObj.setBlocks([
+	// 	//	X		Y			
+	// 			0, 0
+	// 	],[
+	// 	//	TL TR BL BR
+	// 			0,	0,	1,	1
+	// 	])
 	webglObj.render()	
 }
