@@ -19,13 +19,15 @@
 			attribute float a_BlockIndex;
 			attribute vec4 a_LightDirection;
 
+			uniform vec2 u_CamPosition;
+
 			varying float v_BlockIndex;
 			varying vec4 v_LightDirection;
 			void main(){
 				v_BlockIndex = a_BlockIndex;
 				v_LightDirection = a_LightDirection;
 
-				gl_Position = vec4(a_VertexPositions*30.0*2.0/300.0,0.0,1.0);
+				gl_Position = vec4((u_CamPosition+a_VertexPositions*30.0*2.0)/300.0,0.0,1.0);
 				gl_PointSize = 30.0;
 			}
 		</script>

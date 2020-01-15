@@ -113,7 +113,7 @@ function createWebglObj(imageTexture){
 	}
 
 
-
+	gl.uniform2fv(uniformLocations.u_CamPosition,[0,0])
 
 	// TEXTURES
 	// Use image for texture
