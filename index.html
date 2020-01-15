@@ -27,7 +27,8 @@
 				v_BlockIndex = a_BlockIndex;
 				v_LightDirection = a_LightDirection;
 
-				gl_Position = vec4((u_CamPosition+a_VertexPositions*30.0*2.0)/300.0,0.0,1.0);
+				gl_Position = vec4((u_CamPosition+a_VertexPositions*30.0*2.0+30.0)/300.0,0.0,1.0);
+				gl_Position.y = -1.0 * gl_Position.y;
 				gl_PointSize = 30.0;
 			}
 		</script>

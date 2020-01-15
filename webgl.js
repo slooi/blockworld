@@ -200,26 +200,43 @@ function createWebglObj(imageTexture){
 		return program
 	}
 
-	// Exposed Functions
-
-	function setBlocks(newVertices,newLightDirections){
-		vertices = newVertices
-		lightDirections = newLightDirections
-
-
+	function bindAndBuffer(){
 		gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer)
 		gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.STATIC_DRAW)
 		gl.bindBuffer(gl.ARRAY_BUFFER,lightDirectionBuffer)
 		gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(lightDirections),gl.STATIC_DRAW)
 	}
 
+	// Exposed Functions
+
+	function addBlocks(newVertices,newLightDirections){
+		vertices.push(...newVertices)
+		lightDirections.push(...newLightDirections)
+
+		bindAndBuffer()
+	}
+
+	function setBlocks(newVertices,newLightDirections){
+		vertices = newVertices
+		lightDirections = newLightDirections
+
+		bindAndBuffer()
+	}
+
 	function render(){
 		gl.drawArrays(gl.POINTS,0,vertices.length/2)
 	}
 
+	function showStats(){
+		console.log('vertices',vertices)
+		console.log('lightDirections',lightDirections)
+	}
+
 	return {
 		render,
-		setBlocks: setBlocks
+		setBlocks,
+		addBlocks,
+		showStats
 	}
 }
 
