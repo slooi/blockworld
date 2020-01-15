@@ -125,11 +125,14 @@ function createWebglObj(imageTexture){
 	// FUNCTIONS
 
 	function buildAllLightTextures(){
-		const diameter = 4
+		const diameter = 2
 		const TLLight = generateTLLight(diameter)
 		buildLightTexture(TLLight,diameter,1,'u_LightTileTL')
 		console.log('TLLight',TLLight)
-		buildLightTexture(horizontalFlipArray(TLLight),diameter,2,'u_LightTileTR')
+		const TRLight = horizontalFlipArray(TLLight)
+		buildLightTexture(TRLight,diameter,2,'u_LightTileTR')
+		buildLightTexture(verticalFlipArray(TLLight),diameter,3,'u_LightTileBL')
+		buildLightTexture(verticalFlipArray(TRLight),diameter,4,'u_LightTileBR')
 	}
 
 	function buildLightTexture(lightTexture,diameter,textureNum,textureName){
@@ -213,6 +216,23 @@ function horizontalFlipArray(array){
 			}
 		}
 	}
-	console.log('horizontal flip: ',flippedArray)
+	return flippedArray
+}
+// Input: array
+// Output: array
+function verticalFlipArray(array){
+	const flippedArray = []
+	const numOfPixCols = (array.length/4) ** 0.5	//exclusive of RGBA
+	const numOfPixRows = numOfPixCols	//exclusive of RGBA
+	const numOfElementsPerRow = array.length/numOfPixRows
+	for(let i=numOfPixRows-1;i>=0;i--){
+		for(let j=0;j<numOfPixCols;j++){
+			const linearIndex = i * numOfElementsPerRow + j * 4 
+			for(let k=0;k<4;k++){
+				flippedArray.push(array[linearIndex+k])
+			}
+		}
+	}
+	console.log('vertical flip: ',flippedArray)
 	return flippedArray
 }

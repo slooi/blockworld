@@ -40,9 +40,11 @@
 		
 			void main(){
 				vec4 shadowBase = texture2D(u_TileSheet, vec2(gl_PointCoord.x,(gl_PointCoord.y+0.0)/7.0));
-				vec4 lightTileTL = texture2D(u_LightTileTL,vec2(gl_PointCoord));				
+				vec4 lightTileTL = texture2D(u_LightTileTL,vec2(gl_PointCoord));
 				vec4 lightTileTR = texture2D(u_LightTileTR,vec2(gl_PointCoord));
-				vec4 shadowMask = shadowBase + lightTileTL * 1.0 + lightTileTR * 1.0;
+				vec4 lightTileBL = texture2D(u_LightTileBL,vec2(gl_PointCoord));
+				vec4 lightTileBR = texture2D(u_LightTileBR,vec2(gl_PointCoord));
+				vec4 shadowMask = shadowBase + lightTileTL * 1.0 + lightTileTR * 1.0 + lightTileBL * 1.0 + lightTileBR * 1.0;
 		
 				
 
