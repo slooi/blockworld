@@ -17,12 +17,15 @@
 		<script type="shader" id="vsSource">
 			attribute vec2 a_VertexPositions;
 			attribute float a_BlockIndex;
+			attribute vec4 a_LightDirection;
 
 			varying float v_BlockIndex;
+			varying vec4 v_LightDirection;
 			void main(){
 				v_BlockIndex = a_BlockIndex;
+				v_LightDirection = a_LightDirection;
 
-				gl_Position = vec4(a_VertexPositions,0.0,1.0);
+				gl_Position = vec4(a_VertexPositions*30.0*2.0/300.0,0.0,1.0);
 				gl_PointSize = 30.0;
 			}
 		</script>
@@ -31,6 +34,7 @@
 			precision mediump float;
 
 			varying float v_BlockIndex;
+			varying vec4 v_LightDirection;
 
 			uniform sampler2D u_TileSheet;
 			uniform sampler2D u_LightTileTL;
@@ -44,9 +48,8 @@
 				vec4 lightTileTR = texture2D(u_LightTileTR,vec2(gl_PointCoord));
 				vec4 lightTileBL = texture2D(u_LightTileBL,vec2(gl_PointCoord));
 				vec4 lightTileBR = texture2D(u_LightTileBR,vec2(gl_PointCoord));
-				vec4 shadowMask = shadowBase + lightTileTL * 1.0 + lightTileTR * 1.0 + lightTileBL * 1.0 + lightTileBR * 1.0;
-		
-				
+				vec4 shadowMask = shadowBase + lightTileTL * v_LightDirection[0] + lightTileTR * v_LightDirection[1] + lightTileBL * v_LightDirection[2] + lightTileBR * v_LightDirection[3];
+				vec4 a = v_LightDirection;
 
 				vec4 texture = texture2D(u_TileSheet, vec2(gl_PointCoord.x,(gl_PointCoord.y+1.0)/7.0));
 				gl_FragColor = shadowMask*texture;

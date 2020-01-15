@@ -14,5 +14,5 @@ async function setup(){
 }
 
 function gameLoop(webglObj){
-	webglObj.render()
+	webglObj.render()	
 }

@@ -31,7 +31,7 @@ function createWebglObj(imageTexture){
 	}
 
 	// Viewport & clear
-	gl.viewport(0,0,300,300	)
+	gl.viewport(0,0,canvas.width,canvas.height)
 	gl.clearColor(0.4,0.6,0.8,1)
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
@@ -46,13 +46,14 @@ function createWebglObj(imageTexture){
 		const attribName = gl.getActiveAttrib(program,i).name
 		attribLocations[attribName] = gl.getAttribLocation(program,attribName)
 	}
+	console.log('attribLocations',attribLocations)
 
 	// Vertices
 	const vertices = new Float32Array([
 	//	X		Y			
-			-0.5, 0.0,
-			0.5, 0.0,	
-			0.0, 0.5
+			0, 0.0,
+			1, 0.0,	
+			0.0, 1
 	])
 
 	// Vertex Buffer
@@ -71,6 +72,32 @@ function createWebglObj(imageTexture){
 	)
 	gl.enableVertexAttribArray(attribLocations.a_VertexPositions)
 
+
+
+	// lightDirection
+	const lightDirection = new Float32Array([
+		//	TL TR BL BR
+				1,	1,	1,	1,
+				1,	1,	1,	1,
+				1,	1,	1,	1
+		])
+	
+	// Vertex Buffer
+	const lightDirectionBuffer = gl.createBuffer()
+	gl.bindBuffer(gl.ARRAY_BUFFER,lightDirectionBuffer)
+	gl.bufferData(gl.ARRAY_BUFFER,lightDirection,gl.STATIC_DRAW)
+
+	// Vertex Attribute Pointer
+	gl.vertexAttribPointer(
+		attribLocations.a_LightDirection,
+		4,
+		gl.FLOAT,
+		false,
+		4*Float32Array.BYTES_PER_ELEMENT,
+		0
+	)
+	gl.enableVertexAttribArray(attribLocations.a_LightDirection)
+
 	// // Block Index
 	// const blockIndex = new Float32Array([
 	// //	
@@ -84,6 +111,8 @@ function createWebglObj(imageTexture){
 		console.log('asd',gl.getActiveUniform(program,i))
 		uniformLocations[uniformName] = gl.getUniformLocation(program,uniformName)
 	}
+
+
 
 
 	// TEXTURES
@@ -165,7 +194,9 @@ function createWebglObj(imageTexture){
 
 	function buildProgram(){
 		const program = gl.createProgram()
+		console.log(1)
 		gl.attachShader(program,buildShader(gl.VERTEX_SHADER,vsSource))
+		console.log(2)
 		gl.attachShader(program,buildShader(gl.FRAGMENT_SHADER,fsSource))
 		gl.linkProgram(program)
 
@@ -204,6 +235,7 @@ function generateTLLight(diameter){
 // Input: array
 // Output: array
 function horizontalFlipArray(array){
+	console.log('1',array.length)
 	const flippedArray = []
 	const numOfPixCols = (array.length/4) ** 0.5	//exclusive of RGBA
 	const numOfPixRows = numOfPixCols	//exclusive of RGBA
@@ -216,11 +248,13 @@ function horizontalFlipArray(array){
 			}
 		}
 	}
+	console.log('2',flippedArray.length)
 	return flippedArray
 }
 // Input: array
 // Output: array
 function verticalFlipArray(array){
+	console.log('1',array.length)
 	const flippedArray = []
 	const numOfPixCols = (array.length/4) ** 0.5	//exclusive of RGBA
 	const numOfPixRows = numOfPixCols	//exclusive of RGBA
@@ -233,6 +267,7 @@ function verticalFlipArray(array){
 			}
 		}
 	}
+	console.log('2',flippedArray.length)
 	console.log('vertical flip: ',flippedArray)
 	return flippedArray
 }
