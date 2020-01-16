@@ -52,7 +52,6 @@
 				vec4 lightTileBL = texture2D(u_LightTileBL,vec2(gl_PointCoord));
 				vec4 lightTileBR = texture2D(u_LightTileBR,vec2(gl_PointCoord));
 				vec4 shadowMask = shadowBase + lightTileTL * v_LightDirection[0] + lightTileTR * v_LightDirection[1] + lightTileBL * v_LightDirection[2] + lightTileBR * v_LightDirection[3];
-				vec4 a = v_LightDirection;
 
 				vec4 texture = texture2D(u_TileSheet, vec2(gl_PointCoord.x,(gl_PointCoord.y+v_BlockIndex)/7.0));
 				gl_FragColor = shadowMask*texture;

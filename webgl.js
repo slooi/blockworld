@@ -182,13 +182,13 @@ function createWebglObj(imageTexture){
 		buildLightTexture(verticalFlipArray(TRLight),diameter,4,'u_LightTileBR')
 	}
 
-	function buildLightTexture(lightTexture,diameter,textureNum,textureName){
-		const shadowTexture = gl.createTexture()
+	function buildLightTexture(lightArray,diameter,textureNum,textureName){
+		const lightTexture = gl.createTexture()
 		gl.activeTexture(gl.TEXTURE0+textureNum)
-		gl.bindTexture(gl.TEXTURE_2D,shadowTexture)
+		gl.bindTexture(gl.TEXTURE_2D,lightTexture)
 		gl.uniform1i(uniformLocations[textureName],textureNum)
 	
-		const pixel = new Uint8Array(lightTexture)
+		const pixel = new Uint8Array(lightArray)
 		gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,diameter,diameter,0,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
 		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR)	
 		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR)
