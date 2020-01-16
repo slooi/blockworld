@@ -46,7 +46,6 @@ function createWebglObj(imageTexture){
 		const attribName = gl.getActiveAttrib(program,i).name
 		attribLocations[attribName] = gl.getAttribLocation(program,attribName)
 	}
-	console.log('attribLocations',attribLocations)
 
 	// Vertices
 	var vertices = [
@@ -101,7 +100,6 @@ function createWebglObj(imageTexture){
 	let uniformLocations = []
 	for(let i=0;i<gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);i++){
 		const uniformName = gl.getActiveUniform(program,i).name
-		console.log('asd',gl.getActiveUniform(program,i))
 		uniformLocations[uniformName] = gl.getUniformLocation(program,uniformName)
 	}
 
@@ -150,7 +148,6 @@ function createWebglObj(imageTexture){
 		const diameter = 2
 		const TLLight = generateTLLight(diameter)
 		buildLightTexture(TLLight,diameter,1,'u_LightTileTL')
-		console.log('TLLight',TLLight)
 		const TRLight = horizontalFlipArray(TLLight)
 		buildLightTexture(TRLight,diameter,2,'u_LightTileTR')
 		buildLightTexture(verticalFlipArray(TLLight),diameter,3,'u_LightTileBL')
@@ -183,9 +180,7 @@ function createWebglObj(imageTexture){
 
 	function buildProgram(){
 		const program = gl.createProgram()
-		console.log(1)
 		gl.attachShader(program,buildShader(gl.VERTEX_SHADER,vsSource))
-		console.log(2)
 		gl.attachShader(program,buildShader(gl.FRAGMENT_SHADER,fsSource))
 		gl.linkProgram(program)
 
@@ -259,7 +254,6 @@ function generateTLLight(diameter){
 // Input: array
 // Output: array
 function horizontalFlipArray(array){
-	console.log('1',array.length)
 	const flippedArray = []
 	const numOfPixCols = (array.length/4) ** 0.5	//exclusive of RGBA
 	const numOfPixRows = numOfPixCols	//exclusive of RGBA
@@ -272,13 +266,11 @@ function horizontalFlipArray(array){
 			}
 		}
 	}
-	console.log('2',flippedArray.length)
 	return flippedArray
 }
 // Input: array
 // Output: array
 function verticalFlipArray(array){
-	console.log('1',array.length)
 	const flippedArray = []
 	const numOfPixCols = (array.length/4) ** 0.5	//exclusive of RGBA
 	const numOfPixRows = numOfPixCols	//exclusive of RGBA
@@ -291,7 +283,5 @@ function verticalFlipArray(array){
 			}
 		}
 	}
-	console.log('2',flippedArray.length)
-	console.log('vertical flip: ',flippedArray)
 	return flippedArray
 }
