@@ -96,6 +96,34 @@ function createWebglObj(imageTexture){
 	)
 	gl.enableVertexAttribArray(attribLocations.a_LightDirection)
 
+
+
+	// blockIndexes
+	var blockIndexes = [
+		//	blockIndex
+				1,
+				1,
+				1
+		]
+	
+	// Vertex Buffer
+	const blockIndexBuffer = gl.createBuffer()
+	gl.bindBuffer(gl.ARRAY_BUFFER,blockIndexBuffer)
+	gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(blockIndexes),gl.STATIC_DRAW)
+
+	// Vertex Attribute Pointer
+	gl.vertexAttribPointer(
+		attribLocations.a_BlockIndex,
+		1,
+		gl.FLOAT,
+		false,
+		1*Float32Array.BYTES_PER_ELEMENT,
+		0
+	)
+	gl.enableVertexAttribArray(attribLocations.a_BlockIndex)
+
+
+
 	// Uniform Locations
 	let uniformLocations = []
 	for(let i=0;i<gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);i++){
@@ -162,8 +190,8 @@ function createWebglObj(imageTexture){
 	
 		const pixel = new Uint8Array(lightTexture)
 		gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,diameter,diameter,0,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
-		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR)	
-		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR)
+		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST)	
+		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST)
 		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE)
 		gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE)
 	}
@@ -200,20 +228,25 @@ function createWebglObj(imageTexture){
 		gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.STATIC_DRAW)
 		gl.bindBuffer(gl.ARRAY_BUFFER,lightDirectionBuffer)
 		gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(lightDirections),gl.STATIC_DRAW)
+		gl.bindBuffer(gl.ARRAY_BUFFER,blockIndexBuffer)
+		gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(blockIndexes),gl.STATIC_DRAW)
 	}
+
 
 	// Exposed Functions
 
-	function addBlocks(newVertices,newLightDirections){
+	function addBlocks(newVertices,newLightDirections,newBlockIndexes){
 		vertices.push(...newVertices)
 		lightDirections.push(...newLightDirections)
+		blockIndexes.push(...newBlockIndexes)
 
 		bindAndBuffer()
 	}
 
-	function setBlocks(newVertices,newLightDirections){
+	function setBlocks(newVertices,newLightDirections,newBlockIndexes){
 		vertices = newVertices
 		lightDirections = newLightDirections
+		blockIndexes = newBlockIndexes
 
 		bindAndBuffer()
 	}
